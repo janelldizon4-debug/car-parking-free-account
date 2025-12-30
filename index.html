@@ -4,9 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
-
 <title>Car Parking Free Account</title>
+
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#00ffcc">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -23,53 +30,37 @@ body {
 }
 
 .box {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 20, 30, 0.92),
-    rgba(0, 0, 0, 0.95)
-  );
-
-  border-radius: 16px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10,20,30,.92), rgba(0,0,0,.95));
   padding: 20px;
   width: 100%;
   max-width: 380px;
-
-  position: relative;
-  overflow: hidden;
-
-  backdrop-filter: blur(6px);
-
-  box-shadow:
-    0 0 25px rgba(0, 246, 255, 0.35),
-    0 0 45px rgba(255, 79, 216, 0.25),
-    0 20px 40px rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
+  z-index: 1;
+  box-shadow: 0 0 30px rgba(0,255,255,.35);
 }
+
 
 .box::before {
   content: "";
   position: absolute;
-  inset: 0;
-  padding: 2px;
-  border-radius: 16px;
-
-  background: linear-gradient(
-    270deg,
-    #00f6ff,
-    #3b82ff,
-    #ff4fd8,
-    #00f6ff
-  );
-  background-size: 600% 600%;
-  animation: neonBorder 6s linear infinite;
-
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-
-  pointer-events: none;
+  inset: -2px;
+  border-radius: 20px;
+  background: linear-gradient(270deg,#2563ff,#7c3aed,#ff4fd8,#38bdf8);
+  background-size: 400% 400%;
+  animation: gradientMove 6s linear infinite;
+  z-index: -1;
 }
+
+.box::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  background: linear-gradient(180deg, rgba(10,20,30,.92), rgba(0,0,0,.95));
+  border-radius: 16px;
+  z-index: -1;
+}
+
 h1 {
   text-align: center;
   font-size: 22px;
@@ -87,27 +78,21 @@ h1 {
   margin-bottom: 12px;
 }
 
-/* INPUTS – SMALLER */
 .input-wrap {
   position: relative;
 }
 
 input {
   width: 100%;
-  padding: 12px 12px;
-  margin-bottom: 10px;
+  padding: 9px 36px 9px 12px;
+  margin-bottom: 8px;
   border-radius: 8px;
   border: none;
-  font-size: 14px;
-  outline: none;
+  font-size: 13px;
   font-family: 'Orbitron', sans-serif;
-
-  line-height: 1.4;
-  box-sizing: border-box;
+  outline: none;
 }
 
-
-/* EYE ICON ONLY */
 .eye-icon {
   position: absolute;
   right: 10px;
@@ -118,7 +103,6 @@ input {
   user-select: none;
 }
 
-/* BUTTONS */
 button {
   width: 100%;
   padding: 10px;
@@ -132,13 +116,7 @@ button {
 }
 
 .gradient-btn {
-  background: linear-gradient(
-    270deg,
-    #2563ff,
-    #7c3aed,
-    #ff4fd8,
-    #38bdf8
-  );
+  background: linear-gradient(270deg,#2563ff,#7c3aed,#ff4fd8,#38bdf8);
   background-size: 400% 400%;
   animation: gradientMove 4s ease infinite;
   box-shadow: 0 0 12px rgba(124,58,237,.6);
@@ -155,9 +133,7 @@ button {
   padding: 20px 0;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display:none; }
 
 @keyframes gradientMove {
   0% { background-position: 0% 50%; }
@@ -173,8 +149,7 @@ button {
   <h1>🚗 Car Parking Free Account</h1>
 
   <div class="note">
-    Note: Once claimed, delete the email & password from the site and save them,
-This prevents other players from seeing the details
+    Note: If you get the account, please delete email and password.
   </div>
 
   <div id="account">
@@ -194,7 +169,6 @@ This prevents other players from seeing the details
     ❌ Sorry, better luck next time
   </div>
 
-  <!-- RESET BUTTON KEPT -->
   <button class="gradient-btn reset-btn" onclick="resetAccount()">RESET (OWNER)</button>
 </div>
 
@@ -222,10 +196,7 @@ let hidden = false;
 
 accRef.once("value").then(snap => {
   if (!snap.exists()) {
-    accRef.set({
-      email: "demo@email.com",
-      password: "password123"
-    });
+    accRef.set({ email:"demo@email.com", password:"password123" });
   }
 });
 
@@ -251,29 +222,31 @@ function saveAccount() {
 
 function toggleVisibility() {
   const pass = prompt("Owner password:");
-  if (pass !== OWNER_PASS) {
-    alert("Not authorized!");
-    return;
-  }
+  if (pass !== OWNER_PASS) return alert("Not authorized");
 
   hidden = !hidden;
   email.type = hidden ? "password" : "text";
   password.type = hidden ? "password" : "text";
-
   document.querySelector(".eye-icon").textContent = hidden ? "🙈" : "👁";
 }
 
 function resetAccount() {
   const pass = prompt("Owner password:");
   if (pass === OWNER_PASS) {
-    accRef.set({
-      email: "demo@email.com",
-      password: "password123"
-    });
+    accRef.set({ email:"demo@email.com", password:"password123" });
     alert("Account reset!");
   } else {
     alert("Wrong password!");
   }
+}
+</script>
+
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js");
+  });
 }
 </script>
 
