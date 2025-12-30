@@ -1,19 +1,14 @@
-i<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Car Parking Free Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#00ffcc">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
@@ -30,27 +25,16 @@ body {
 }
 
 .box {
-  background: linear-gradient(
-    180deg,
-    rgba(10, 20, 30, 0.92),
-    rgba(0, 0, 0, 0.95)
-  );
-
-  border-radius: 16px;
+  position: relative;
+  background: linear-gradient(180deg, rgba(10,20,30,.92), rgba(0,0,0,.95));
   padding: 20px;
   width: 100%;
   max-width: 380px;
-
-  position: relative;
-  overflow: hidden;
-
-  backdrop-filter: blur(6px);
-
-  box-shadow:
-    0 0 25px rgba(0, 246, 255, 0.35),
-    0 0 45px rgba(255, 79, 216, 0.25),
-    0 20px 40px rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
+  z-index: 1;
+  box-shadow: 0 0 30px rgba(0,255,255,.35);
 }
+
 
 .box::before {
   content: "";
@@ -95,16 +79,13 @@ h1 {
 
 input {
   width: 100%;
-  padding: 12px 12px;
-  margin-bottom: 10px;
+  padding: 9px 36px 9px 12px;
+  margin-bottom: 8px;
   border-radius: 8px;
   border: none;
-  font-size: 14px;
-  outline: none;
+  font-size: 13px;
   font-family: 'Orbitron', sans-serif;
-
-  line-height: 1.4;
-  box-sizing: border-box;
+  outline: none;
 }
 
 .eye-icon {
@@ -163,8 +144,8 @@ button {
   <h1> Car Parking Free Account</h1>
 
   <div class="note">
-    Note: Once claimed, delete the email & password from the site and save them
-,This prevents other players from seeing the details
+    Once claimed, delete the email & password from the site and save them,
+ This prevents other players from seeing the details
   </div>
 
   <div id="account">
@@ -260,7 +241,9 @@ function resetAccount() {
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js");
+    navigator.serviceWorker.register("service-worker.js")
+      .then(() => console.log("PWA Ready"))
+      .catch(err => console.log("SW Error:", err));
   });
 }
 </script>
